@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript" src="https://unpkg.com/vue@2.7.14/dist/vue.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/lodash/lodash.min.js"></script>
+    </head>
+    <body>
+        <div id="drag-box">
+            <transition-group name="drag" class="list" tag="div">
+            <div
+                @dragenter="dragenter($event, index)"
+                @dragover="dragover($event, index)"
+                @dragstart="dragstart(index)"
+                @drag="drag($event, index)"
+                draggable
+                v-for="(item, index) in list"
+                :key="item.label"
+                class="list-item"
+            >
+                {{ item.label }}
+            </div>
+            </transition-group>
+        </div>
+        <style>
+            .list list-style: none;
+            .list .drag-move {
+                transition: transform 0.3s;
+            }
+            .list .list-item {
+                cursor: move;
+                width: 160px;
+                background: #EA6E59;
+                border-radius: 4px;
+                color: #FFF;
+                margin-bottom: 6px;
+                height: 230px;
+                line-height: 50px;
+                text-align: center;
+            }
+        </style>
+    </body>
+</html>
+
+  <script>
+  new Vue({
+    el: "#drag-box",
+    data() {
+      return {
+        list: [
+          { label: "列表1" },
+          { label: "列表2" },
+          { label: "列表3" },
+          { label: "列表4" },
+          { label: "列表5" },
+          { label: "列表6" },
+        ],
+        dragIndex: "",
+        enterIndex: "",
+      };
+    },
+    methods: {
+      shuffle() {
+        this.list = this.$shuffle(this.list);
+      },
+      dragstart(index) {
+        this.dragIndex = index;
+      },
+      dragenter(e, index) {
+        //e.preventDefault();
+        if (this.dragIndex !== index) {
+          const moving = this.list[this.dragIndex];
+          this.list.splice(this.dragIndex, 1);
+          this.list.splice(index, 0, moving);
+          this.dragIndex = index;
+        }
+      },
+      dragover(e, index) {
+        e.preventDefault();
+      },
+      drag(e, index) {
+        //console.log(e);
+      },
+    },
+  })
+  </script>
+
+  
